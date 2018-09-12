@@ -1,18 +1,22 @@
 package com.hatenablog.gikoha.shiftsolver;
 
 //workaround class for drl
-public class SolutionParameter extends AbstractPersistable {
+public class SolutionParameter extends AbstractPersistable
+{
     private float countAverage;
 
-    public SolutionParameter(final int id, final String name) {
+    public SolutionParameter(final int id, final String name)
+    {
         super(id, name);
     }
 
-    public float getCountAverage() {
+    public float getCountAverage()
+    {
         return countAverage;
     }
 
-    public void setCountAverage(float countAverage) {
+    public void setCountAverage(float countAverage)
+    {
         this.countAverage = countAverage;
     }
 }

@@ -3,6 +3,7 @@ package com.hatenablog.gikoha.shiftsolver;
 public class Day extends AbstractPersistable
 {
     protected int dayValue;
+
     public Day()
     {
         super();

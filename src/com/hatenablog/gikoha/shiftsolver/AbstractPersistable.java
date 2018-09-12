@@ -1,7 +1,8 @@
 package com.hatenablog.gikoha.shiftsolver;
-import java.io.Serializable;
 
 import org.apache.commons.lang.builder.CompareToBuilder;
+
+import java.io.Serializable;
 
 public abstract class AbstractPersistable implements Serializable,
         Comparable<AbstractPersistable>
@@ -10,11 +11,11 @@ public abstract class AbstractPersistable implements Serializable,
 
     protected String name;
 
-	public AbstractPersistable()
+    public AbstractPersistable()
     {
     }
 
-	public AbstractPersistable(final int id, final String name)
+    public AbstractPersistable(final int id, final String name)
     {
         super();
         this.id = id;
@@ -28,14 +29,14 @@ public abstract class AbstractPersistable implements Serializable,
 
     public void setId(final int id)
     {
-	    this.id = id;
+        this.id = id;
     }
 
     public int compareTo(final AbstractPersistable other)
     {
         return new CompareToBuilder()
-            .append(this.getClass().getName(), other.getClass().getName())
-            .append(this.id, other.id).toComparison();
+                .append(this.getClass().getName(), other.getClass().getName())
+                .append(this.id, other.id).toComparison();
     }
 
     @Override

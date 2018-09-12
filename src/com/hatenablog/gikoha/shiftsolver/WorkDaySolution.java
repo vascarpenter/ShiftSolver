@@ -4,7 +4,6 @@ import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
-import org.optaplanner.core.api.score.Score;
 import org.optaplanner.core.api.score.buildin.hardsoftbigdecimal.HardSoftBigDecimalScore;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class WorkDaySolution implements Solution<HardSoftBigDecimalScore>
     {   // The class (class com.hatenablog.gikoha.shiftsolver.WorkDaySolution) should have a no-arg constructor to create a planning clone
     }
 
-    public WorkDaySolution(final List<Employee>employeeList, final List<WorkDayAssignment>workDayAssignmentList,
+    public WorkDaySolution(final List<Employee> employeeList, final List<WorkDayAssignment> workDayAssignmentList,
                            final List<Day> dayList)
     {
         this.employeeList = employeeList;
@@ -36,7 +35,7 @@ public class WorkDaySolution implements Solution<HardSoftBigDecimalScore>
         this.solutionParameter = new SolutionParameter(9999, "SolutionParameter");
 
         // 平均的な拘束回数を求め、DRL用のworkaround classに入れる
-        this.solutionParameter.setCountAverage((float)workDayAssignmentList.size() / (float)employeeList.size());
+        this.solutionParameter.setCountAverage((float) workDayAssignmentList.size() / (float) employeeList.size());
     }
 
     @ValueRangeProvider(id = "employeeList")
@@ -44,25 +43,31 @@ public class WorkDaySolution implements Solution<HardSoftBigDecimalScore>
     {
         return this.employeeList;
     }
-    public void setEmployeeList(List<Employee> employeeList) {
+
+    public void setEmployeeList(List<Employee> employeeList)
+    {
         this.employeeList = employeeList;
     }
 
     @PlanningEntityCollectionProperty()
-    public List<WorkDayAssignment> getWorkDayAssignmentList() {
+    public List<WorkDayAssignment> getWorkDayAssignmentList()
+    {
         return workDayAssignmentList;
     }
 
-    public void setWorkDayAssignmentList(List<WorkDayAssignment> workDayAssignmentList) {
+    public void setWorkDayAssignmentList(List<WorkDayAssignment> workDayAssignmentList)
+    {
         this.workDayAssignmentList = workDayAssignmentList;
     }
 
 
-    public HardSoftBigDecimalScore getScore() {
+    public HardSoftBigDecimalScore getScore()
+    {
         return this.score;
     }
 
-    public void setScore(final HardSoftBigDecimalScore score) {
+    public void setScore(final HardSoftBigDecimalScore score)
+    {
         this.score = score;
     }
 

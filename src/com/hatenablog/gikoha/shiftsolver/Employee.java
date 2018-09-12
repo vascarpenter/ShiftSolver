@@ -2,7 +2,8 @@ package com.hatenablog.gikoha.shiftsolver;
 
 public class Employee extends AbstractPersistable
 {
-    public Employee() {
+    public Employee()
+    {
         super();
     }
 
