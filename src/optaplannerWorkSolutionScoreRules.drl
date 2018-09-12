@@ -1,0 +1,46 @@
+package com.hatenablog.gikoha.shiftsolver;
+dialect "java"
+
+import java.lang.Math;
+import java.math.BigDecimal;
+
+import org.optaplanner.core.api.score.buildin.hardsoftbigdecimal.HardSoftBigDecimalScoreHolder
+
+import com.hatenablog.gikoha.shiftsolver.WorkDayAssignment;
+import com.hatenablog.gikoha.shiftsolver.WorkDaySolution;
+import com.hatenablog.gikoha.shiftsolver.Day;
+import com.hatenablog.gikoha.shiftsolver.Employee;
+
+global HardSoftBigDecimalScoreHolder scoreHolder;
+
+// ############################################################################
+// Hard constraints
+// ############################################################################
+//休みの日には割り当てない
+//rule "attendance"
+//    when
+//        JobAssignment(people != null, people.isAttendance(job.day) == false)
+//    then
+//        scoreHolder.addHardConstraintMatch(kcontext, new BigDecimal(-1));
+//end
+
+// ############################################################################
+// Soft constraints
+// ############################################################################
+//各仕事は必ず誰かが担当すること（employeeはnullable=trueなので、条件次第で未割り当てになることもあり得るので）
+rule "requiredPeople"
+    when
+    	WorkDayAssignment(employee == null)
+    then
+        scoreHolder.addSoftConstraintMatch(kcontext, new BigDecimal(-10000));
+end
+
+//担当回数の差は小さくすること ; penalty (-10000*(average - workCount)^2)
+rule "countLeveling"
+  when
+    $solutionParameter : SolutionParameter()
+    $employee : Employee()
+    $workCountPerPeople : Number() from accumulate( $workDayAssignment : WorkDayAssignment( employee == $employee ), count( $workDayAssignment ) )
+  then
+    scoreHolder.addSoftConstraintMatch(kcontext, new BigDecimal((int)(-10000D * Math.pow($solutionParameter.getCountAverage() - $workCountPerPeople.doubleValue(), 2) )));
+end
