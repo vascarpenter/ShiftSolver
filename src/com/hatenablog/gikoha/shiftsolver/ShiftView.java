@@ -135,6 +135,7 @@ public class ShiftView extends JFrame implements SolverEventListener
             try
             {
                 WorkDaySolution bestSolution = get();
+                printScore(bestSolution);
 
                 //  Display the result
                 String jobResult = toDisplayJobString(bestSolution);
