@@ -1,8 +1,11 @@
 package com.hatenablog.gikoha.shiftsolver;
 
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
+import org.optaplanner.core.api.domain.solution.PlanningScore;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
 import org.optaplanner.core.api.domain.solution.Solution;
+import org.optaplanner.core.api.domain.solution.drools.ProblemFactCollectionProperty;
+import org.optaplanner.core.api.domain.solution.drools.ProblemFactProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoftbigdecimal.HardSoftBigDecimalScore;
 
@@ -11,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 @PlanningSolution
-public class WorkDaySolution implements Solution<HardSoftBigDecimalScore>
+public class WorkDaySolution
 {
     private List<Employee> employeeList;
     private List<Day> dayList;
@@ -20,6 +23,7 @@ public class WorkDaySolution implements Solution<HardSoftBigDecimalScore>
 
     private List<WorkDayAssignment> workDayAssignmentList;
 
+    @ProblemFactProperty
     private SolutionParameter solutionParameter;
 
     public WorkDaySolution()
@@ -39,6 +43,7 @@ public class WorkDaySolution implements Solution<HardSoftBigDecimalScore>
     }
 
     @ValueRangeProvider(id = "employeeList")
+    @ProblemFactCollectionProperty
     public List<Employee> getEmployeeList()
     {
         return this.employeeList;
@@ -60,18 +65,17 @@ public class WorkDaySolution implements Solution<HardSoftBigDecimalScore>
         this.workDayAssignmentList = workDayAssignmentList;
     }
 
-
+    @PlanningScore
     public HardSoftBigDecimalScore getScore()
     {
         return this.score;
     }
-
     public void setScore(final HardSoftBigDecimalScore score)
     {
         this.score = score;
     }
 
-
+/*
     @Override
     public Collection<Object> getProblemFacts()
     {
@@ -81,4 +85,5 @@ public class WorkDaySolution implements Solution<HardSoftBigDecimalScore>
         facts.add(this.solutionParameter);
         return facts;
     }
+*/
 }

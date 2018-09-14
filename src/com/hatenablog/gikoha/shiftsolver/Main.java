@@ -15,12 +15,14 @@ public class Main
 
         EventQueue.invokeLater(new Runnable()
         {
+            @Override
             public void run()
             {
                 try
                 {
                     ShiftView window = new ShiftView();
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     e.printStackTrace();
                 }
