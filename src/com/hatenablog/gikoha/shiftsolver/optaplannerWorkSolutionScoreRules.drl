@@ -17,12 +17,21 @@ global HardSoftBigDecimalScoreHolder scoreHolder;
 // Hard constraints
 // ############################################################################
 //休みの日には割り当てない
-//rule "attendance"
-//    when
-//        JobAssignment(people != null, people.isAttendance(job.day) == false)
-//    then
-//        scoreHolder.addHardConstraintMatch(kcontext, new BigDecimal(-1));
-//end
+rule "holiday"
+    when
+        WorkDayAssignment(employee != null,  employee.isHoliday(day) == true)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, new BigDecimal(-10));
+end
+
+//employeeの拘束の日
+//  TODO 他の employeeであった場合のscoreを下げるruleが書けなかった　どうやったらいいのか
+rule "workday"
+    when
+        WorkDayAssignment(employee != null, employee.isWorkDay(day) == true)
+    then
+        scoreHolder.addHardConstraintMatch(kcontext, new BigDecimal(1));
+end
 
 // ############################################################################
 // Soft constraints

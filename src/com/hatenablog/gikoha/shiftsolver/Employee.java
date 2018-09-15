@@ -1,20 +1,47 @@
 package com.hatenablog.gikoha.shiftsolver;
 
+import java.util.HashMap;
+import java.util.List;
+
 public class Employee extends AbstractPersistable
 {
     protected String workDayAssets;
     protected String holidayAssets;
+    protected List<Day> dayList;
+    private HashMap<Day, Boolean> holidayMap;
+    private HashMap<Day, Boolean> workDayMap;
 
     public Employee()
     {
         super();
     }
 
-    public Employee(final int id, final String name, final String workDay, final String holiday)
+    public Employee(final int id, final String name, final String workDay, final String holiday, final List<Day> dayList)
     {
         super(id, name);
-        workDayAssets = workDay;
-        holidayAssets = holiday;
+        // HashMapの設定にdayListを用いるためコピーを保存
+        setDayList(dayList);
+
+        setWorkDayAssets(workDay);
+        setHolidayAssets(holiday);
+    }
+
+    public void setDayList(List<Day> dayList)
+    {
+        this.dayList = dayList;
+    }
+
+    public boolean isHoliday(final Day day)
+    {
+        if(day==null)
+            return false;
+        return this.holidayMap.get(day);
+    }
+    public boolean isWorkDay(final Day day)
+    {
+        if(day==null)
+            return false;
+        return this.workDayMap.get(day);
     }
 
     public String getWorkDayAssets()
@@ -25,7 +52,34 @@ public class Employee extends AbstractPersistable
 
     public void setWorkDayAssets(String workDayAssets)
     {
+        HashMap<Day, Boolean> workDayMap = new HashMap<Day, Boolean>();
         this.workDayAssets = workDayAssets;
+
+        // HashMapで nullを帰すとDRLで落ちるので最初すべてfalseで初期化
+        for(Day day : this.dayList)
+        {
+            workDayMap.put(day, false);
+        }
+        if(workDayAssets!=null)
+        {
+            // ","で区切られた文字列を解析
+            String[] s = workDayAssets.split(",");
+            for (String st : s)
+            {
+                int day = 0;
+                try
+                {
+                    day = Integer.parseInt(st);
+                    if (day >= 1 && day <= 31)
+                        workDayMap.put(this.dayList.get(day - 1), true);
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
+        }
+        this.workDayMap = workDayMap;
+
     }
 
     public String getHolidayAssets()
@@ -36,6 +90,32 @@ public class Employee extends AbstractPersistable
 
     public void setHolidayAssets(String holidayAssets)
     {
+        HashMap<Day, Boolean> holidayMap = new HashMap<Day, Boolean>();
         this.holidayAssets = holidayAssets;
+
+        // HashMapで nullを帰すとDRLで落ちるので最初すべてfalseで初期化
+        for(Day day : this.dayList)
+        {
+            holidayMap.put(day, false);
+        }
+        if(holidayAssets!=null)
+        {
+            // ","で区切られた文字列を解析
+            String[] s = holidayAssets.split(",");
+            for (String st : s)
+            {
+                int day = 0;
+                try
+                {
+                    day = Integer.parseInt(st);
+                    if (day >= 1 && day <= 31)
+                        holidayMap.put(this.dayList.get(day - 1), true);
+                }
+                catch (NumberFormatException e)
+                {
+                }
+            }
+        }
+        this.holidayMap = holidayMap;
     }
 }

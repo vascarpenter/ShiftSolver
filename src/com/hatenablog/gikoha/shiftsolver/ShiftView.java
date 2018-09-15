@@ -1,13 +1,13 @@
 package com.hatenablog.gikoha.shiftsolver;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 import org.optaplanner.core.api.solver.Solver;
 import org.optaplanner.core.api.solver.SolverFactory;
 import org.optaplanner.core.api.solver.event.BestSolutionChangedEvent;
 import org.optaplanner.core.api.solver.event.SolverEventListener;
-import org.optaplanner.core.config.score.director.ScoreDirectorFactoryConfig;
-import org.optaplanner.core.config.solver.SolverConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -15,18 +15,17 @@ import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.nio.channels.*;
 
 public class ShiftView extends JFrame implements SolverEventListener
 {
+    protected final transient Logger logger = LoggerFactory.getLogger(this
+            .getClass());
+
     private JButton startButton;
     private JTextArea textArea1;
     private JPanel panel1;
@@ -227,6 +226,12 @@ public class ShiftView extends JFrame implements SolverEventListener
 
     public void readEmployeeListCSV(Reader stream)
     {
+        if (dayList == null)
+        {
+            logger.error("do not call readEmployeeListCSV until dayList is not null");
+            return;
+        }
+
         int id = 1000;
         employeeList = new ArrayList<Employee>();
 
@@ -239,10 +244,10 @@ public class ShiftView extends JFrame implements SolverEventListener
                 Employee e;
                 if (str.length == 3)
                 {
-                    e = new Employee(id++, str[0], str[1], str[2]);
+                    e = new Employee(id++, str[0], str[1], str[2], dayList);
                 } else
                 {
-                    e = new Employee(id++, str[0], "", "");
+                    e = new Employee(id++, str[0], "", "", dayList);
                 }
                 employeeList.add(e);
             }
@@ -252,13 +257,13 @@ public class ShiftView extends JFrame implements SolverEventListener
         {
             e.printStackTrace();
             // error, default to Doctor A,B,C
-            Employee e1 = new Employee(id++, "Doctor A", null, null);
+            Employee e1 = new Employee(id++, "Doctor A", "", "", dayList);
             employeeList.add(e1);
 
-            Employee e2 = new Employee(id++, "Doctor B", null, null);
+            Employee e2 = new Employee(id++, "Doctor B", "", "", dayList);
             employeeList.add(e2);
 
-            Employee e3 = new Employee(id++, "Doctor C", null, null);
+            Employee e3 = new Employee(id++, "Doctor C", "", "", dayList);
             employeeList.add(e3);
         }
 
@@ -348,34 +353,6 @@ public class ShiftView extends JFrame implements SolverEventListener
         saveResultButton.setEnabled(bestSolution != null);
     }
 
-    /*
-    public final void copyStreamToTemp(String src, String dest)
-    {
-        try
-        {
-
-            InputStream drlStream = this.getClass().getClassLoader()
-                    .getResourceAsStream(src);
-
-            // copy stream to temporary file
-            FileOutputStream fo = new FileOutputStream(dest);
-            byte[] buf = new byte[256];
-            int len;
-            // ファイルの終わりまで読み込む
-            while((len = drlStream.read(buf)) != -1){
-                fo.write(buf,0,len);
-            }
-
-            //ファイルの終了処理
-            fo.close();
-            drlStream.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-*/
 
     public final void executeAction()
     {
@@ -384,14 +361,11 @@ public class ShiftView extends JFrame implements SolverEventListener
         setSolvingState(true);
         statusLabel.setText("検索中...(10秒間)");
 
-        //copyStreamToTemp("com/hatenablog/gikoha/shiftsolver/optaplannerWorkSolutionScoreRules.drl", "/tmp/temp.drl");
-        // specify optaplannerConfig.xml
-
-
- //       SolverFactory solverFactory = SolverFactory.createFromXmlFile(new File("/tmp/temp.xml"));
         InputStream cfgStream = this.getClass().getClassLoader()
                 .getResourceAsStream("com/hatenablog/gikoha/shiftsolver/optaplannerConfig.xml");
         SolverFactory solverFactory = SolverFactory.createFromXmlInputStream(cfgStream);
+
+// TODO     DRLをstream化できない=jar化できない DRLをListから読ませる方法は。
 
         solver = solverFactory.buildSolver();
         solver.addEventListener(this);
@@ -426,7 +400,7 @@ public class ShiftView extends JFrame implements SolverEventListener
         }
 
         @Override
-        protected WorkDaySolution doInBackground() throws Exception
+        protected WorkDaySolution doInBackground()
         {
             return solver.solve(problem);
         }

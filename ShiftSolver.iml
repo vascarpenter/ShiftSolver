@@ -7,11 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="opencsv-4.2" level="project" />
     <orderEntry type="library" name="binaries" level="project" />
-    <orderEntry type="library" name="commons-lang-2" level="project" />
     <orderEntry type="library" name="slf4j-api-1.7.25" level="project" />
-    <orderEntry type="library" name="slf4j-simple-1.7.25" level="project" />
-    <orderEntry type="library" name="junit-4.7" level="project" />
-    <orderEntry type="library" name="opencsv-2.3" level="project" />
+    <orderEntry type="library" name="commons-lang-2.6" level="project" />
   </component>
 </module>
