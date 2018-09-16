@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) gikoha 2018.
+ * このソフトウェアは、 Apache 2.0ライセンスで配布されている製作物が含まれています。
+ * This software includes the work that is distributed in the Apache License 2.0
+ *
+ */
+
 package com.hatenablog.gikoha.shiftsolver;
 
 import com.opencsv.CSVReader;
@@ -201,7 +208,7 @@ public class ShiftView extends JFrame implements SolverEventListener
     }
 
 
-    public void readLists()
+    public void initWorkDayAssignment()
     {
         int id = 0;
         dayList = new ArrayList<Day>();
@@ -216,6 +223,12 @@ public class ShiftView extends JFrame implements SolverEventListener
             WorkDayAssignment workDayAssignment = new WorkDayAssignment(id++, s + " Assignment", day);
             workDayAssignmentList.add(workDayAssignment);
         }
+    }
+
+    public void readLists()
+    {
+
+        initWorkDayAssignment();
 
         InputStream employeeFileStream = this.getClass().getClassLoader()
                 .getResourceAsStream("com/hatenablog/gikoha/shiftsolver/doctor.csv");
@@ -267,6 +280,30 @@ public class ShiftView extends JFrame implements SolverEventListener
             employeeList.add(e3);
         }
 
+        for (Day d : dayList)
+        {
+            boolean othersWorkDay = false;
+            for (Employee e : employeeList)
+            {
+                if (e.isWorkDay(d))
+                {
+                    othersWorkDay = true;
+                    break;
+                }
+            }
+            if (othersWorkDay)
+            {
+                for (Employee e : employeeList)
+                {
+                    if (!e.isWorkDay(d))
+                    {
+                        // the employee is not member of workDay; so put getOthersWorkDayMap to true
+                        e.getOthersWorkDayMap().put(d, true);
+                    }
+                }
+
+            }
+        }
     }
 
     public void loadAction()
@@ -275,6 +312,9 @@ public class ShiftView extends JFrame implements SolverEventListener
         int selected = filechooser.showOpenDialog(this);
         if (selected != JFileChooser.APPROVE_OPTION) return;
         File file = filechooser.getSelectedFile();
+
+        // re-initialize work day assignment
+        initWorkDayAssignment();
 
         // delete all employee from list
 
@@ -359,7 +399,7 @@ public class ShiftView extends JFrame implements SolverEventListener
         bestSolution = null;
 
         setSolvingState(true);
-        statusLabel.setText("検索中...(10秒間)");
+        statusLabel.setText("検索中...(10秒間お待ちください)");
 
         InputStream cfgStream = this.getClass().getClassLoader()
                 .getResourceAsStream("com/hatenablog/gikoha/shiftsolver/optaplannerConfig.xml");

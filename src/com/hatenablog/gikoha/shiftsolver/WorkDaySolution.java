@@ -1,16 +1,20 @@
+/*
+ * Copyright (c) gikoha 2018.
+ * このソフトウェアは、 Apache 2.0ライセンスで配布されている製作物が含まれています。
+ * This software includes the work that is distributed in the Apache License 2.0
+ *
+ */
+
 package com.hatenablog.gikoha.shiftsolver;
 
 import org.optaplanner.core.api.domain.solution.PlanningEntityCollectionProperty;
 import org.optaplanner.core.api.domain.solution.PlanningScore;
 import org.optaplanner.core.api.domain.solution.PlanningSolution;
-import org.optaplanner.core.api.domain.solution.Solution;
 import org.optaplanner.core.api.domain.solution.drools.ProblemFactCollectionProperty;
 import org.optaplanner.core.api.domain.solution.drools.ProblemFactProperty;
 import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoftbigdecimal.HardSoftBigDecimalScore;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @PlanningSolution
@@ -70,6 +74,7 @@ public class WorkDaySolution
     {
         return this.score;
     }
+
     public void setScore(final HardSoftBigDecimalScore score)
     {
         this.score = score;

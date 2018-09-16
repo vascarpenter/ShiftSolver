@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) gikoha 2018.
+ * このソフトウェアは、 Apache 2.0ライセンスで配布されている製作物が含まれています。
+ * This software includes the work that is distributed in the Apache License 2.0
+ *
+ */
+
 package com.hatenablog.gikoha.shiftsolver;
 
 import java.util.HashMap;
@@ -8,6 +15,7 @@ public class Employee extends AbstractPersistable
     protected String workDayAssets;
     protected String holidayAssets;
     protected List<Day> dayList;
+    protected HashMap<Day, Boolean> othersWorkDayMap;
     private HashMap<Day, Boolean> holidayMap;
     private HashMap<Day, Boolean> workDayMap;
 
@@ -24,6 +32,15 @@ public class Employee extends AbstractPersistable
 
         setWorkDayAssets(workDay);
         setHolidayAssets(holiday);
+
+        HashMap<Day, Boolean> othersWorkDayMap = new HashMap<Day, Boolean>();
+
+        // HashMapで nullを帰すとDRLで落ちるので最初すべてfalseで初期化
+        for (Day day : this.dayList)
+        {
+            othersWorkDayMap.put(day, false);
+        }
+        this.othersWorkDayMap = othersWorkDayMap;
     }
 
     public void setDayList(List<Day> dayList)
@@ -33,16 +50,25 @@ public class Employee extends AbstractPersistable
 
     public boolean isHoliday(final Day day)
     {
-        if(day==null)
+        if (day == null)
             return false;
         return this.holidayMap.get(day);
     }
+
     public boolean isWorkDay(final Day day)
     {
-        if(day==null)
+        if (day == null)
             return false;
         return this.workDayMap.get(day);
     }
+
+    public boolean isOthersWorkDay(final Day day)
+    {
+        if (day == null)
+            return false;
+        return this.othersWorkDayMap.get(day);
+    }
+
 
     public String getWorkDayAssets()
     {
@@ -56,11 +82,11 @@ public class Employee extends AbstractPersistable
         this.workDayAssets = workDayAssets;
 
         // HashMapで nullを帰すとDRLで落ちるので最初すべてfalseで初期化
-        for(Day day : this.dayList)
+        for (Day day : this.dayList)
         {
             workDayMap.put(day, false);
         }
-        if(workDayAssets!=null)
+        if (workDayAssets != null)
         {
             // ","で区切られた文字列を解析
             String[] s = workDayAssets.split(",");
@@ -94,11 +120,11 @@ public class Employee extends AbstractPersistable
         this.holidayAssets = holidayAssets;
 
         // HashMapで nullを帰すとDRLで落ちるので最初すべてfalseで初期化
-        for(Day day : this.dayList)
+        for (Day day : this.dayList)
         {
             holidayMap.put(day, false);
         }
-        if(holidayAssets!=null)
+        if (holidayAssets != null)
         {
             // ","で区切られた文字列を解析
             String[] s = holidayAssets.split(",");
@@ -118,4 +144,15 @@ public class Employee extends AbstractPersistable
         }
         this.holidayMap = holidayMap;
     }
+
+    public HashMap<Day, Boolean> getOthersWorkDayMap()
+    {
+        return othersWorkDayMap;
+    }
+
+    public void setOthersWorkDayMap(HashMap<Day, Boolean> othersWorkDayMap)
+    {
+        this.othersWorkDayMap = othersWorkDayMap;
+    }
+
 }

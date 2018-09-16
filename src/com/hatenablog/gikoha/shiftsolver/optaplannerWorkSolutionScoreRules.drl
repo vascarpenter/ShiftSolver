@@ -21,16 +21,15 @@ rule "holiday"
     when
         WorkDayAssignment(employee != null,  employee.isHoliday(day) == true)
     then
-        scoreHolder.addHardConstraintMatch(kcontext, new BigDecimal(-10));
+        scoreHolder.addHardConstraintMatch(kcontext, new BigDecimal(-1));
 end
 
-//employeeの拘束の日
-//  TODO 他の employeeであった場合のscoreを下げるruleが書けなかった　どうやったらいいのか
+//その日が 他の employee拘束日であった場合
 rule "workday"
     when
-        WorkDayAssignment(employee != null, employee.isWorkDay(day) == true)
+        WorkDayAssignment(employee != null, employee.isOthersWorkDay(day) == true)
     then
-        scoreHolder.addHardConstraintMatch(kcontext, new BigDecimal(1));
+        scoreHolder.addHardConstraintMatch(kcontext, new BigDecimal(-1));
 end
 
 // ############################################################################
