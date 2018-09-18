@@ -24,13 +24,12 @@ optaplannerを使ったシフト割り振りプログラム
 - [x] あるdoctorの拘束日であった場合のscoreを下げるルールに変更した
   (前もって他のdoctorに禁止日HashMapを持たせることにした)
 - [x] Windows環境下では csvを読むときにutf8を認識していないため文字化けしていた
+- [x] jarで書き出して動く手段をget
+   - DRLをResourceから null pointerを出さずに読ませるには；
+    http://gikoha.hatenablog.com/entry/2018/09/18/171430
+    を参照し kie.confを書き換える必要あり。
 
 ## 課題
-- [ ] jarで書き出すとうまく動かない
-   - 原因はjar内のファイルはstreamとして読む必要があったから
-   - doctor arrayの初期化ファイルをstream化、またcreateFromXmlInputStreamを使用した
-   - しかしdrlをstream化できない
-   - DRLをListから読ませる方法がわからない
 - [ ] 休日の実装 (年、月、日、曜日)
 - [ ] 連勤をなるべく避ける
 - [ ] 拘束日の翌日はなるべくいれない　（連勤よりも強い)
