@@ -22,6 +22,7 @@ import javax.swing.table.TableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -233,7 +234,7 @@ public class ShiftView extends JFrame implements SolverEventListener
         InputStream employeeFileStream = this.getClass().getClassLoader()
                 .getResourceAsStream("com/hatenablog/gikoha/shiftsolver/doctor.csv");
 
-        readEmployeeListCSV(new InputStreamReader(employeeFileStream));
+        readEmployeeListCSV(new InputStreamReader(employeeFileStream, StandardCharsets.UTF_8));
 
     }
 

@@ -80,15 +80,4 @@ public class WorkDaySolution
         this.score = score;
     }
 
-/*
-    @Override
-    public Collection<Object> getProblemFacts()
-    {
-        List<Object> facts = new ArrayList<Object>();
-        facts.addAll(this.employeeList);
-        facts.addAll(this.dayList);
-        facts.add(this.solutionParameter);
-        return facts;
-    }
-*/
 }

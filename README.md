@@ -23,7 +23,8 @@ optaplannerを使ったシフト割り振りプログラム
 - [x] doctorの拘束日・休日を optaplannerのルールに入れる
 - [x] あるdoctorの拘束日であった場合のscoreを下げるルールに変更した
   (前もって他のdoctorに禁止日HashMapを持たせることにした)
-   
+- [x] Windows環境下では csvを読むときにutf8を認識していないため文字化けしていた
+
 ## 課題
 - [ ] jarで書き出すとうまく動かない
    - 原因はjar内のファイルはstreamとして読む必要があったから
